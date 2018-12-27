@@ -88,7 +88,6 @@ client.connect(PORT, HOST, function() {
 });
 
 client.on('data', function(data) {
-  mainWindow.send('USERS_LIST',data);
   console.log('DATA FROM SERVER: ' + data);
   var strData = data+'';
   var messageType = strData.split(";");
@@ -105,6 +104,9 @@ client.on('data', function(data) {
           mainWindow.send('USERS_LIST',data);
           console.log("500");
           break;
+      default:
+        console.log("Message from server undefined");
+        break;
   }
 });
 

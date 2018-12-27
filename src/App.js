@@ -20,14 +20,17 @@ class App extends Component {
     this.inputChangeHandler = this.inputChangeHandler.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUsersList = this.handleUsersList.bind(this);
+    this.handleNewUser = this.handleNewUser.bind(this);
   }
 
   componentDidMount(){
     ipcRenderer.on('USERS_LIST',this.handleUsersList);
+    ipcRenderer.on('NEW_USER',this.handleNewUser);
   }
 
   componentWillUnmount(){
     ipcRenderer.removeListener('USERS_LIST',this.handleUsersList);
+    ipcRenderer.removeListener('NEW_USER',this.handleNewUser);
   }
 
   handleUsersList(event, data){
@@ -37,7 +40,17 @@ class App extends Component {
     this.setState({
       usersList: arrayData
     })
-    console.log('[APP] users list received', this.state.usersList);
+    console.log('[APP 500] users list received', this.state.usersList);
+  }
+
+  handleNewUser(event, data){
+    var strData = data + '';
+    var arrayData = strData.split(";");
+    var newUsersList = [...this.state.usersList, arrayData[1]]
+    this.setState({
+      usersList: newUsersList
+    })
+    console.log('[APP 200] users list updated ',this.state.usersList);
   }
 
   inputChangeHandler(event){
