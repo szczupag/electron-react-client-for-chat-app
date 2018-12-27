@@ -3,6 +3,10 @@
   flex-direction: row;
 }
 
+body{
+  margin: 0;
+}
+
 .main{
   display: flex;
   flex-direction: row;
@@ -45,6 +49,7 @@
   padding: 10px;
   margin: 5px;
   height: calc(100vh - 155px);
+  border-radius: 8px;
 }
 
 .chat-bar{
@@ -88,15 +93,17 @@
   background: #ebebeb;
   display: inline;
   padding: 4px 8px;
-  border-radius: 8px;
+  border-radius: 100px;
 }
 
 .user{
   margin: 5px 0;
   padding: 10px 10px;
   display: flex;
+  border-radius: 100px; 
 }
 
+.user.active,
 .user:hover{
   background-color: #ebebeb;
 }

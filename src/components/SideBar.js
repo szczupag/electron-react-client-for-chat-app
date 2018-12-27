@@ -7,15 +7,17 @@ class SideBar extends Component {
   constructor(props){
     super(props);
     this.state = {
-      usersList: this.props.usersList
+      usersList: this.props.usersList,
+      currentFriend: this.props.currentFriend
     }
   }
 
   componentWillReceiveProps(newProps){
     this.setState({
-      usersList: newProps.usersList
+      usersList: newProps.usersList,
+      currentFriend: newProps.currentFriend
     })
-    console.log('[SIDE BAR] props received', this.state.usersList)
+    console.log('[SIDE BAR] props received')
   }
 
   render() {
@@ -27,7 +29,9 @@ class SideBar extends Component {
         </div>
         <div className="login">{this.props.username}</div>
         <UsersList 
+          currentUserHandler={this.props.currentUserHandler}
           usersList={this.state.usersList}
+          currentFriend={this.state.currentFriend}
         />
       </div>
     );
