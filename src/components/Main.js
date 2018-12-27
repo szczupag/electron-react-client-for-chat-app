@@ -6,14 +6,15 @@ class Main extends Component {
   constructor(props){
     super(props);
     this.state = {
-      usersList: this.props.usersLists
+      usersList: this.props.usersList
     }
   }
 
-  componentWillReceiveProps(props){
+  componentWillReceiveProps(newProps){
     this.setState({
-      usersList: props.usersList
+      usersList: newProps.usersList
     })
+    console.log('[MAIN] props received', this.state.usersList)
   }
   
   render() {

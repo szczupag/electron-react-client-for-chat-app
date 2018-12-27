@@ -15,7 +15,7 @@ class App extends Component {
       username: '',
       submitClass: ' disabled-btn',
       isLogged: false,
-      usersLists: [],
+      usersList: undefined,
     };
     this.inputChangeHandler = this.inputChangeHandler.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,17 +27,17 @@ class App extends Component {
   }
 
   componentWillUnmount(){
-    // ipcRenderer.removeListener('USERS_LIST',this.handleUsersList);
+    ipcRenderer.removeListener('USERS_LIST',this.handleUsersList);
   }
 
   handleUsersList(event, data){
     var strData = data + '';
     var arrayData = strData.split(";");
     arrayData.shift();
-    console.log('[APP] users list received',arrayData);
     this.setState({
-      usersLists: arrayData
+      usersList: arrayData
     })
+    console.log('[APP] users list received', this.state.usersList);
   }
 
   inputChangeHandler(event){
@@ -91,7 +91,7 @@ class App extends Component {
       content = 
         <Main 
           username={this.state.username}
-          usersLists={this.state.usersLists}
+          usersList={this.state.usersList}
           />
     }
     return (

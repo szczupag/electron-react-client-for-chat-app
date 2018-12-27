@@ -11,10 +11,11 @@ class SideBar extends Component {
     }
   }
 
-  componentWillReceiveProps(props){
+  componentWillReceiveProps(newProps){
     this.setState({
-      usersList: props.usersList
+      usersList: newProps.usersList
     })
+    console.log('[SIDE BAR] props received', this.state.usersList)
   }
 
   render() {
