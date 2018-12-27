@@ -1,0 +1,186 @@
+.App{
+  display: flex;
+  flex-direction: row;
+}
+
+.main{
+  display: flex;
+  flex-direction: row;
+}
+
+.side-bar{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 300px;
+  background-color: #ebebeb;
+}
+
+.header{
+  padding: 15px;
+  height: 50px;
+  display: flex;
+}
+
+.name{
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 50px;
+  margin-left: 15px;
+}
+
+.logo{
+  width: 50px;
+  height: 50px;
+}
+
+.login{
+  padding: 15px;
+  height: 15px;
+}
+
+.users-list{
+  background-color: #fff;
+  padding: 10px;
+  margin: 5px;
+  height: calc(100vh - 155px);
+}
+
+.chat-bar{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 5px);
+  width: calc(100vw - 305px);
+  border-top: 5px solid #ebebeb;
+  border-right: 5px solid #ebebeb;
+}
+
+.send-message-form input{
+  height: 15px;
+  padding: 15px;
+  width: calc(100vw - 335px);
+  border-style: none;
+  border-top: 5px solid #ebebeb;
+  border-bottom: 5px solid #ebebeb;
+}
+
+.send-message-form input:focus {
+  outline-width: 0;
+}
+
+.message-list{
+  padding: 5px;
+}
+
+.message {
+  margin: 15px 0;
+}
+
+.message .message-username {
+  font-size: 11px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+
+.message .message-text {
+  background: #ebebeb;
+  display: inline;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.user{
+  margin: 5px 0;
+  padding: 10px 10px;
+  display: flex;
+}
+
+.user:hover{
+  background-color: #ebebeb;
+}
+
+.user-avatar{
+  height: 25px;
+  width: 25px;
+  margin-right: 5px;
+}
+
+.user-username{
+  line-height: 25px;
+}
+
+.welcome{
+  background-color: #ebebeb;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome .header{
+  animation: welcomeHeaderAnimation 5s ease;
+}
+
+.login-form{
+  display: flex;
+  animation: welcomeLoginAnimation 5s ease;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.login-username{
+  border-style: none;
+  border-radius: 18px;
+  padding: 10px 15px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.login-username:focus {
+  outline-width: 0;
+}
+
+.login-button{
+  background-color: rgb(255, 188, 0);
+  border-radius: 18px;
+  padding: 10px 15px;
+  text-decoration: none;
+  text-align: center;
+  margin: 10px 0;
+  color: #000;
+}
+
+.disabled-btn{
+  pointer-events: none;
+}
+
+.login-button:hover{
+  background-color: rgb(224, 165, 0);
+}
+
+@keyframes welcomeHeaderAnimation {
+  0%{
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  60%{
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+@keyframes welcomeLoginAnimation {
+  0%{
+    opacity: 0;
+  }
+  60%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
