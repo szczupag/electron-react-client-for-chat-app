@@ -17,7 +17,6 @@ class SideBar extends Component {
       usersList: newProps.usersList,
       currentFriend: newProps.currentFriend
     })
-    console.log('[SIDE BAR] props received')
   }
 
   render() {
@@ -27,7 +26,7 @@ class SideBar extends Component {
           <img className="logo" src={logo} alt="logo"/>
           <div className="name">Hmm-Hmm</div>
         </div>
-        <div className="login">{this.props.username}</div>
+        <div className="login">Howdy, {this.props.username}!</div>
         <UsersList 
           currentUserHandler={this.props.currentUserHandler}
           usersList={this.state.usersList}

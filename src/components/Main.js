@@ -8,9 +8,8 @@ class Main extends Component {
     this.state = {
       usersList: this.props.usersList,
       messages: this.props.messages,
-      currentFriend: this.props.currentFriend
+      currentFriend: this.props.currentFriend,
     }
-    this.currentUserHandler = this.currentUserHandler.bind(this)
   }
 
   componentWillReceiveProps(newProps){
@@ -18,13 +17,6 @@ class Main extends Component {
       usersList: newProps.usersList,
       messages: newProps.messages,
       currentFriend: newProps.currentFriend
-    })
-    console.log('[MAIN] props received')
-  }
-
-  currentUserHandler(user){
-    this.setState({
-        currentFriend: user
     })
   }
   
@@ -35,12 +27,13 @@ class Main extends Component {
           usersList={this.state.usersList}
           username={this.props.username}
           currentFriend={this.state.currentFriend}
-          currentUserHandler={this.currentUserHandler}
+          currentUserHandler={this.props.currentUserHandler}
         />
         <ChatBar 
           messages={this.state.messages}
           username={this.props.username}
           currentFriend={this.state.currentFriend}
+          handleSendMessage={this.props.handleSendMessage}
         />
       </div>
     );

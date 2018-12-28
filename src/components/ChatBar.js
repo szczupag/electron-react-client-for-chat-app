@@ -17,7 +17,6 @@ class ChatBar extends Component {
       messages: newProps.messages,
       currentFriend: newProps.currentFriend
     })
-    console.log('[CHAT BAR] props received')
   }
 
   render() {
@@ -29,8 +28,7 @@ class ChatBar extends Component {
           currentFriend={this.state.currentFriend}
         />
         <SendMessageForm
-          username={this.props.username}
-          currentFriend={this.state.currentFriend}
+          handleSendMessage={this.props.handleSendMessage}          
         />
       </div>
     );

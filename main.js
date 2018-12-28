@@ -1,5 +1,7 @@
 'use strict';
 
+const constants = require('./src/constants');
+
 // Import parts of electron to use
 const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path')
@@ -18,7 +20,7 @@ if ( process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) 
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1024, height: 768, show: false
+    width: constants.WINDOW_WIDTH, height: constants.WINDOW_HEIGHT, show: false
   });
 
   // and load the index.html of the app.
@@ -80,29 +82,29 @@ app.on('activate', () => {
 });
 
 var net = require('net');
-var HOST = '127.0.0.1';
-var PORT = 1234;
+var HOST = constants.HOST;
+var PORT = constants.PORT;
 var client = new net.Socket(); 
 client.connect(PORT, HOST, function() {
-    console.log('CONNECTED TO: ' + HOST + ':' + PORT);
+    console.log('[CONNECTED TO]' + HOST + ':' + PORT);
 });
 
 client.on('data', function(data) {
-  console.log('DATA FROM SERVER: ' + data);
+  console.log('[DATA FROM SERVER]' + data);
   var strData = data+'';
   var messageType = strData.split(";");
   switch (messageType[0]){
-      case '200':
-          mainWindow.send('NEW_USER',data);
-          console.log("200");
+      case constants.NEW_USER_CODE:
+          mainWindow.send(constants.NEW_USER,data);
           break;
-      case '400':
-          mainWindow.send('MESSAGE',data);
-          console.log("400");
+      case constants.USER_LEFT_CODE:
+          mainWindow.send(constants.USER_LEFT, data);
           break;
-      case '500':
-          mainWindow.send('USERS_LIST',data);
-          console.log("500");
+      case constants.MESSAGE_RECEIVED_CODE:
+          mainWindow.send(constants.MESSAGE_RECEIVED,data);
+          break;
+      case constants.USERS_LIST_CODE:
+          mainWindow.send(constants.USERS_LIST,data);
           break;
       default:
         console.log("Message from server undefined");
@@ -110,10 +112,10 @@ client.on('data', function(data) {
   }
 });
 
-ipcMain.on('SUBMIT_USERNAME',(event,arg)=>{
+ipcMain.on(constants.SUBMIT_USERNAME,(event,arg)=>{
   client.write(arg);
 })
 
-ipcMain.on('WRITE_MESSAGE',(event,arg)=>{
+ipcMain.on(constants.WRITE_MESSAGE,(event,arg)=>{
   client.write(arg);
 })

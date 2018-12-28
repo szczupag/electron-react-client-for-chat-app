@@ -14,7 +14,11 @@ class MessageList extends React.Component {
             messages: newProps.messages,
             currentFriend: newProps.currentFriend
         })
-        console.log('[MESSAGE LIST] props received')
+        this.scrollToBottom();
+    }
+
+    scrollToBottom(){
+        this.messagesEnd.scrollIntoView({behavior: "smooth"});
     }
 
     render() {
@@ -41,6 +45,10 @@ class MessageList extends React.Component {
                         )
                     }
                 })}
+                <div 
+                    style={{float:"left", clear:"both"}}
+                    ref={(el)=>{this.messagesEnd = el}}>
+                </div>
             </div>
         )
     }
