@@ -23,14 +23,16 @@ body{
 }
 
 .header{
+  margin: 20px 0;
   padding: 15px;
   height: 50px;
   display: flex;
+  justify-content: center
 }
 
 .name{
   font-size: 30px;
-  font-weight: 500;
+  font-weight: bold;
   line-height: 50px;
   margin-left: 15px;
 }
@@ -41,16 +43,28 @@ body{
 }
 
 .login{
+  text-align: center;
   padding: 15px 15px 15px 30px;
   height: 15px;
+  background-color: rgb(255, 188, 0);
+  margin: 18px;
+  border-radius: 100px;
+  box-shadow: 0px 4px 6px -2px rgba(0,0,0,0.3);
 }
 
 .users-list{
-  background-color: #fff;
   padding: 10px;
   margin: 5px;
   height: calc(100vh - 155px);
   overflow: scroll;
+}
+
+.empty-messages-list,
+.empty-users-list{
+  text-align: center;
+  font-weight: lighter;
+  font-style: italic;
+  font-size: 0.8rem;
 }
 
 .chat-bar{
@@ -63,13 +77,21 @@ body{
   border-right: 5px solid #ebebeb;
 }
 
+.send-message-form input::placeholder{
+  font-weight: lighter;
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
 .send-message-form input{
+  font-size: inherit;
   height: 15px;
   padding: 15px;
   width: calc(100vw - 335px);
   border-style: none;
   border-top: 5px solid #ebebeb;
   border-bottom: 5px solid #ebebeb;
+  box-shadow: inset 0px 5px 10px -2px rgba(0,0,0,0.2);
 }
 
 .send-message-form input:focus {
@@ -81,6 +103,7 @@ body{
   display: flex;
   flex-direction: column;
   overflow: scroll;
+  box-shadow: inset 0px 5px 10px -2px rgba(0,0,0,0.2);
 }
 
 .message {
@@ -89,6 +112,11 @@ body{
 
 .message.to-current-friend{
   margin-left: auto;
+}
+
+.message.message.to-current-friend .message-username{
+  text-align: right;
+  padding-right: 8px;
 }
 
 .message .message-username {
@@ -103,20 +131,20 @@ body{
   display: inline;
   padding: 5px 18px;
   border-radius: 100px;
-  box-shadow: 0px 5px 15px -2px rgba(0,0,0,0.2);
+  box-shadow: 0px 4px 6px -2px rgba(0,0,0,0.3);
 }
 
 .user{
-  margin: 5px 0;
+  margin: 10px 0;
   padding: 10px 10px;
   display: flex;
   border-radius: 100px; 
+  background-color: #fff;
 }
 
 .user.active,
 .user:hover{
-  background-color: #ebebeb;
-  box-shadow: 0px 5px 15px -2px rgba(0,0,0,0.2);
+  box-shadow: 0px 4px 6px -2px rgba(0,0,0,0.3);
 }
 
 .user-avatar{
@@ -156,8 +184,7 @@ body{
   padding: 10px 15px;
   font-size: 16px;
   text-align: center;
-  box-shadow: inset 0px 4px 15px -2px rgba(0,0,0,0.2);
-
+  box-shadow: inset 0px 4px 6px -2px rgba(0,0,0,0.3);
 }
 
 .login-username:focus {
@@ -172,7 +199,7 @@ body{
   text-align: center;
   margin: 10px 0;
   color: #000;
-  box-shadow: 0px 5px 15px -2px rgba(0,0,0,0.2);
+  box-shadow: 0px 4px 6px -2px rgba(0,0,0,0.3);
 }
 
 .disabled-btn{

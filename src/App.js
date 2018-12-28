@@ -2,7 +2,7 @@
 import {ipcRenderer} from 'electron';
 
 import React, { Component } from 'react';
-import logo from './img/hmmm.png';
+import logo from './assets/img/hmmm.png';
 
 import './App.css';
 import Main from './components/Main';

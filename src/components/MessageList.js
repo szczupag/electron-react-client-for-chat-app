@@ -22,29 +22,33 @@ class MessageList extends React.Component {
     }
 
     render() {
+        var messagesToDisplay = this.state.messages.map((message, index)=>{
+            if(message.from == this.state.currentFriend && message.to == this.props.username){
+                return (
+                    <div
+                        className="message from-current-friend"
+                        key={index}>
+                        <div className="message-username">{message.from}</div>
+                        <div className="message-text">{message.message}</div>
+                    </div>
+                )
+            }else if (message.to == this.state.currentFriend && message.from == this.props.username){
+                return (
+                    <div
+                        className="message to-current-friend"
+                        key={index}>
+                        <div className="message-username">{message.from}</div>
+                        <div className="message-text">{message.message}</div>
+                    </div>
+                )
+            }
+        });
+        if(messagesToDisplay.length == 0){
+            messagesToDisplay = <p className="empty-messages-list">There are no messages yet! Start typing below</p>
+        }
         return (
             <div className="message-list">
-                {this.state.messages.map((message, index)=>{
-                    if(message.from == this.state.currentFriend && message.to == this.props.username){
-                        return (
-                            <div
-                                className="message from-current-friend"
-                                key={index}>
-                                <div className="message-username">{message.from}</div>
-                                <div className="message-text">{message.message}</div>
-                            </div>
-                        )
-                    }else if (message.to == this.state.currentFriend && message.from == this.props.username){
-                        return (
-                            <div
-                                className="message to-current-friend"
-                                key={index}>
-                                <div className="message-username">{message.from}</div>
-                                <div className="message-text">{message.message}</div>
-                            </div>
-                        )
-                    }
-                })}
+                {messagesToDisplay}
                 <div 
                     style={{float:"left", clear:"both"}}
                     ref={(el)=>{this.messagesEnd = el}}>

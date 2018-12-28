@@ -1,5 +1,5 @@
 import React from 'react';
-import avatar from '../img/hugging.png';
+import avatar from '../assets/img/hugging.png';
 
 class UsersList extends React.Component {
     constructor(props){
@@ -43,7 +43,7 @@ class UsersList extends React.Component {
         } else {
             return (
                 <div className="users-list">
-                    <span>No friends online</span>
+                    <p className="empty-users-list">There are no friends online</p>
                 </div>
             )
         }

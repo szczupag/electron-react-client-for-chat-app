@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import UsersList from './UsersList';
-import logo from '../img/hmmm.png';
+import logo from '../assets/img/hmmm.png';
 
 
 class SideBar extends Component {
