@@ -20,7 +20,7 @@ if ( process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) 
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: constants.WINDOW_WIDTH, height: constants.WINDOW_HEIGHT, show: false
+    width: constants.WINDOW_WIDTH, height: constants.WINDOW_HEIGHT, show: false, icon: path.join(__dirname, '/src/assets/img/hmmm.png')
   });
 
   // and load the index.html of the app.
@@ -68,9 +68,11 @@ app.on('ready', createWindow);
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  // if (process.platform !== 'darwin') {
+  // }
+  app.quit();
+  process.exit();
+
 });
 
 app.on('activate', () => {
