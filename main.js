@@ -85,6 +85,10 @@ var net = require('net');
 var HOST = constants.HOST;
 var PORT = constants.PORT;
 var client = new net.Socket(); 
+
+var opts;
+var player = require('play-sound')(opts={});
+
 client.connect(PORT, HOST, function() {
     console.log('[CONNECTED TO]' + HOST + ':' + PORT);
 });
@@ -96,13 +100,22 @@ client.on('data', function(data) {
   switch (messageType[0]){
       case constants.NEW_USER_CODE:
           mainWindow.send(constants.NEW_USER,data);
+          player.play('./src/assets/online.m4a', function(err){
+            if (err) throw err
+          })
           break;
       case constants.USER_LEFT_CODE:
           mainWindow.send(constants.USER_LEFT, data);
+          player.play('./src/assets/online.m4a', function(err){
+            if (err) throw err
+          })
           break;
       case constants.MESSAGE_RECEIVED_CODE:
           mainWindow.send(constants.MESSAGE_RECEIVED,data);
           console.log('[MESSAGE RECEIVED]',data+'');
+          player.play('./src/assets/gg.m4a', function(err){
+            if (err) throw err
+          })
           break;
       case constants.USERS_LIST_CODE:
           mainWindow.send(constants.USERS_LIST,data);
