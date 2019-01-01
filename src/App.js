@@ -53,10 +53,19 @@ class App extends Component {
   handleNewUser(event, data){
     var strData = data + '';
     var arrayData = strData.split(";");
-    var newUsersList = [...this.state.usersList, arrayData[1]]
-    this.setState({
-      usersList: newUsersList
-    })
+    if(this.state.usersList!=undefined){
+      var newUsersList = [...this.state.usersList, arrayData[1]];
+      this.setState({
+        usersList: newUsersList,
+        currentFriend: newUsersList[0]
+      })
+    }else{
+      var newUsersList = [arrayData[1]];
+      this.setState({
+        usersList: newUsersList,
+        currentFriend: arrayData[1]
+      })
+    }
     console.log('[APP 200] new user append ',this.state.usersList);
   }
 
@@ -67,10 +76,17 @@ class App extends Component {
     var newUsersList = this.state.usersList.filter((user)=>{
       return user != arrayData[1];
     })
-    this.setState({
-      usersList: newUsersList
-    })
-    console.log('[APP 300] user left',arrayData[1]);
+    if(newUsersList.length != 0){
+      this.setState({
+        usersList: newUsersList,
+      })
+    } else {
+      this.setState({
+        usersList: undefined,
+        currentFriend: 'no friends online'
+      })
+    }
+    console.log('[APP 300] user left',arrayData[1], newUsersList.length);
   }
 
   //400;user;message
@@ -95,7 +111,7 @@ class App extends Component {
     var arrayData = strData.split(";");
     arrayData.shift();
     arrayData.splice(-1,1);
-    if(arrayData[0]!=''){
+    if(arrayData[0]!=undefined){
       this.setState({
         usersList: arrayData,
         currentFriend: arrayData[0]
@@ -103,7 +119,7 @@ class App extends Component {
     }else{
       this.setState({
         usersList: undefined,
-      currentFriend: 'no friends online'
+        currentFriend: 'no friends online'
       })
     }
     console.log('[APP 500] users list received', this.state.usersList);
@@ -196,12 +212,12 @@ class App extends Component {
           </div>
           <div className="login-form">
             <input 
-              className="login-username" 
+              className="login-host" 
               placeholder="Host" 
               value={this.state.host} 
               onChange={(event) => this.hostChangeHandler(event)}></input>
             <input 
-              className="login-username" 
+              className="login-port" 
               placeholder="Port" 
               value={this.state.port} 
               onChange={(event) => this.portChangeHandler(event)}></input>
