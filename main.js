@@ -45,9 +45,9 @@ function createWindow() {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
     // Open the DevTools automatically if developing
-    if ( dev ) {
-      mainWindow.webContents.openDevTools();
-    }
+    // if ( dev ) {
+    //   mainWindow.webContents.openDevTools();
+    // }
   });
 
   // Emitted when the window is closed.
@@ -90,9 +90,9 @@ var client = new net.Socket();
 
 var opts;
 var player = require('play-sound')(opts={});
-var loginMusic = player.play('./src/assets/menu.m4a',function(err){
-  if (err && !err.killed) throw err
-});
+// var loginMusic = player.play('./src/assets/menu.m4a',function(err){
+//   if (err && !err.killed) throw err
+// });
 
 client.on('data', function(data) {
   console.log('[DATA FROM SERVER]' + data);
@@ -135,7 +135,7 @@ ipcMain.on(constants.CONNECT,(event,arg)=>{
 
 ipcMain.on(constants.SUBMIT_USERNAME,(event,arg)=>{
   client.write(arg);
-  loginMusic.kill();
+  // loginMusic.kill();
 })
 
 ipcMain.on(constants.WRITE_MESSAGE,(event,arg)=>{
