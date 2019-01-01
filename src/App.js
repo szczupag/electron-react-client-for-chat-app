@@ -13,14 +13,20 @@ class App extends Component {
     super(props);
     this.state = {
       username: '',
+      host: '127.0.0.1',
+      port: '1234',
       submitClass: ' disabled-btn',
       isLogged: false,
+      isConnected: false,
       usersList: undefined,
       messages: [],
       currentFriend: 'no friends online'
     };
-    this.inputChangeHandler = this.inputChangeHandler.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.usernameChangeHandler = this.usernameChangeHandler.bind(this);
+    this.hostChangeHandler = this.hostChangeHandler.bind(this);
+    this.portChangeHandler = this.portChangeHandler.bind(this);
+    this.handleUsernameSubmit = this.handleUsernameSubmit.bind(this);
+    this.handleConnection = this.handleConnection.bind(this);
     this.handleUsersList = this.handleUsersList.bind(this);
     this.handleNewUser = this.handleNewUser.bind(this);
     this.handleNewMessage = this.handleNewMessage.bind(this);
@@ -119,7 +125,31 @@ class App extends Component {
     console.log("[APP] message send",strData);
   }
 
-  inputChangeHandler(event){
+  hostChangeHandler(event){
+    if(event.target.value !== ''){
+      this.setState({
+        host: event.target.value,
+      })
+    } else {
+      this.setState({
+        host: event.target.value,
+      })
+    }
+  }
+
+  portChangeHandler(event){
+    if(event.target.value !== ''){
+      this.setState({
+        port: event.target.value,
+      })
+    } else {
+      this.setState({
+        port: event.target.value,
+      })
+    }
+  }
+
+  usernameChangeHandler(event){
     if(event.target.value !== ''){
       this.setState({
         username: event.target.value,
@@ -133,9 +163,18 @@ class App extends Component {
     }
   }
 
-  handleSubmit(){
+  handleUsernameSubmit(){
     this.setState({isLogged: true});
     ipcRenderer.send(constants.SUBMIT_USERNAME,this.state.username);
+  }
+
+  handleConnection(){
+    this.setState({isConnected: true});
+    var connectionData = {
+      port: this.state.port,
+      host: this.state.host
+    }
+    ipcRenderer.send(constants.CONNECT,connectionData);
   }
 
   currentUserHandler(user){
@@ -145,41 +184,70 @@ class App extends Component {
   }
 
   render() {
+    var isConnected = this.state.isConnected;
     var isLogged = this.state.isLogged;
     let content;
-    if(!isLogged) {
+    if(!isConnected){
       content = 
-      <div className="welcome">
-            <div className="header">
-              <img className="logo" src={logo} alt="logo"/>
-              <div className="name">Hmm-Hmm</div>
-            </div>
-            <div className="login-form">
-              <input 
-                id="usernameInput"
-                className="login-username" 
-                placeholder="Username" 
-                value={this.state.username} 
-                onChange={(event) => this.inputChangeHandler(event)}></input>
-              <a
-                id="connectBtn"
-                className={"login-button"+this.state.submitClass} 
-                onClick={this.handleSubmit}
-                >
-                Submit
-              </a>
-            </div>
-          </div> 
-    } else {
-      content = 
-        <Main 
-          currentFriend={this.state.currentFriend}
-          username={this.state.username}
-          usersList={this.state.usersList}
-          messages={this.state.messages}
-          handleSendMessage={this.handleSendMessage}
-          currentUserHandler={this.currentUserHandler}
-          />
+        <div className="welcome">
+          <div className="header">
+            <img className="logo" src={logo} alt="logo"/>
+            <div className="name">Hmm-Hmm</div>
+          </div>
+          <div className="login-form">
+            <input 
+              className="login-username" 
+              placeholder="Host" 
+              value={this.state.host} 
+              onChange={(event) => this.hostChangeHandler(event)}></input>
+            <input 
+              className="login-username" 
+              placeholder="Port" 
+              value={this.state.port} 
+              onChange={(event) => this.portChangeHandler(event)}></input>
+            <a
+              className={"login-button"} 
+              onClick={this.handleConnection}
+              >
+              Connect
+            </a>
+          </div>
+        </div> 
+    }else{
+      if(!isLogged) {
+        content = 
+        <div className="welcome">
+              <div className="header">
+                <img className="logo" src={logo} alt="logo"/>
+                <div className="name">Hmm-Hmm</div>
+              </div>
+              <div className="login-form">
+                <input 
+                  id="usernameInput"
+                  className="login-username" 
+                  placeholder="Username" 
+                  value={this.state.username} 
+                  onChange={(event) => this.usernameChangeHandler(event)}></input>
+                <a
+                  id="connectBtn"
+                  className={"login-button"+this.state.submitClass} 
+                  onClick={this.handleUsernameSubmit}
+                  >
+                  Submit
+                </a>
+              </div>
+            </div> 
+      } else {
+        content = 
+          <Main 
+            currentFriend={this.state.currentFriend}
+            username={this.state.username}
+            usersList={this.state.usersList}
+            messages={this.state.messages}
+            handleSendMessage={this.handleSendMessage}
+            currentUserHandler={this.currentUserHandler}
+            />
+      }
     }
     return (
         <div className="App">

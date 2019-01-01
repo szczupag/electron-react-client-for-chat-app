@@ -91,9 +91,7 @@ var client = new net.Socket();
 var opts;
 var player = require('play-sound')(opts={});
 
-client.connect(PORT, HOST, function() {
-    console.log('[CONNECTED TO]' + HOST + ':' + PORT);
-});
+
 
 client.on('data', function(data) {
   console.log('[DATA FROM SERVER]' + data);
@@ -127,6 +125,12 @@ client.on('data', function(data) {
         break;
   }
 });
+
+ipcMain.on(constants.CONNECT,(event,arg)=>{
+  client.connect(arg.port, arg.host, function() {
+    console.log('[CONNECTED TO]' + arg.host + ':' + arg.host);
+  });
+})
 
 ipcMain.on(constants.SUBMIT_USERNAME,(event,arg)=>{
   client.write(arg);

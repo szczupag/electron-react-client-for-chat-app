@@ -3,9 +3,12 @@ module.exports = Object.freeze({
     WINDOW_WIDTH: 800,
     WINDOW_HEIGHT: 768,
 
-    // server setups
+    // default server setups
     HOST: '127.0.0.1',
     PORT: 1234,
+
+    // connection with server
+    CONNECT: 'CONNECT',
 
     // handling messages from server
     NEW_USER: 'NEW_USER',
