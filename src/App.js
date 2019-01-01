@@ -88,16 +88,24 @@ class App extends Component {
     var strData = data + '';
     var arrayData = strData.split(";");
     arrayData.shift();
-    this.setState({
-      usersList: arrayData,
-      currentFriend: arrayData[0]
-    })
+    arrayData.splice(-1,1);
+    if(arrayData[0]!=''){
+      this.setState({
+        usersList: arrayData,
+        currentFriend: arrayData[0]
+      })
+    }else{
+      this.setState({
+        usersList: undefined,
+      currentFriend: 'no friends online'
+      })
+    }
     console.log('[APP 500] users list received', this.state.usersList);
   }
 
   //to;message
   handleSendMessage(message){
-    var strData = this.state.currentFriend+";"+message;
+    var strData = this.state.currentFriend+";"+message+";";
     ipcRenderer.send(constants.WRITE_MESSAGE,strData);
     var newMessage = {
       from: this.state.username,

@@ -46,7 +46,7 @@ function createWindow() {
     mainWindow.show();
     // Open the DevTools automatically if developing
     if ( dev ) {
-      mainWindow.webContents.openDevTools();
+      // mainWindow.webContents.openDevTools();
     }
   });
 
@@ -102,6 +102,7 @@ client.on('data', function(data) {
           break;
       case constants.MESSAGE_RECEIVED_CODE:
           mainWindow.send(constants.MESSAGE_RECEIVED,data);
+          console.log('[MESSAGE RECEIVED]',data+'');
           break;
       case constants.USERS_LIST_CODE:
           mainWindow.send(constants.USERS_LIST,data);
@@ -118,4 +119,5 @@ ipcMain.on(constants.SUBMIT_USERNAME,(event,arg)=>{
 
 ipcMain.on(constants.WRITE_MESSAGE,(event,arg)=>{
   client.write(arg);
+  console.log(arg+'');
 })
