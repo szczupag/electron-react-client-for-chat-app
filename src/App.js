@@ -18,6 +18,7 @@ class App extends Component {
       submitClass: ' disabled-btn',
       isLogged: false,
       isConnected: false,
+      validConnection: true,
       usersList: undefined,
       messages: [],
       currentFriend: 'no friends online'
@@ -33,6 +34,9 @@ class App extends Component {
     this.handleUserLeft = this.handleUserLeft.bind(this);
     this.handleSendMessage = this.handleSendMessage.bind(this);
     this.currentUserHandler = this.currentUserHandler.bind(this);
+    this.handleServerDisconnected = this.handleServerDisconnected.bind(this);
+    this.handleServerConnected = this.handleServerConnected.bind(this);
+    this.handleServerConnectionFailure = this.handleServerConnectionFailure.bind(this);
   }
 
   componentDidMount(){
@@ -40,6 +44,9 @@ class App extends Component {
     ipcRenderer.on(constants.NEW_USER,this.handleNewUser);
     ipcRenderer.on(constants.MESSAGE_RECEIVED,this.handleNewMessage);
     ipcRenderer.on(constants.USER_LEFT,this.handleUserLeft);
+    ipcRenderer.on(constants.SERVER_DISCONNECTED,this.handleServerDisconnected);
+    ipcRenderer.on(constants.SERVER_CONNECTED, this.handleServerConnected);
+    ipcRenderer.on(constants.SERVER_CONNECTION_FAILURE, this.handleServerConnectionFailure);
   }
 
   componentWillUnmount(){
@@ -47,6 +54,9 @@ class App extends Component {
     ipcRenderer.removeListener(constants.NEW_USER,this.handleNewUser);
     ipcRenderer.removeListener(constants.MESSAGE_RECEIVED,this.handleNewMessage);
     ipcRenderer.removeListener(constants.USER_LEFT,this.handleUserLeft);
+    ipcRenderer.removeListener(constants.SERVER_DISCONNECTED,this.handleServerDisconnected);
+    ipcRenderer.removeListener(constants.SERVER_CONNECTED, this.handleServerConnected);
+    ipcRenderer.removeListener(constants.SERVER_CONNECTION_FAILURE, this.handleServerConnectionFailure);
   }
 
   //200;newuser
@@ -125,6 +135,21 @@ class App extends Component {
     console.log('[APP 500] users list received', this.state.usersList);
   }
 
+  //600;
+  handleServerDisconnected(){
+    this.setState({isConnected: false});
+  }
+
+  handleServerConnected(){
+    this.setState({
+      isConnected: true
+    });
+  }
+
+  handleServerConnectionFailure(){
+    this.setState({validConnection: false})
+  }
+
   //to;message
   handleSendMessage(message){
     var strData = this.state.currentFriend+";"+message+";";
@@ -185,7 +210,6 @@ class App extends Component {
   }
 
   handleConnection(){
-    this.setState({isConnected: true});
     var connectionData = {
       port: this.state.port,
       host: this.state.host
@@ -200,10 +224,15 @@ class App extends Component {
   }
 
   render() {
+    var isValidConnection = this.state.validConnection;
     var isConnected = this.state.isConnected;
     var isLogged = this.state.isLogged;
     let content;
-    if(!isConnected){
+    let error;
+    if(!isValidConnection){
+      error = <p className="error-msg">Couldn't connect to the server</p>
+    }
+    if(!isConnected && isLogged){
       content = 
         <div className="welcome">
           <div className="header">
@@ -211,26 +240,37 @@ class App extends Component {
             <div className="name">Hmm-Hmm</div>
           </div>
           <div className="login-form">
-            <input 
-              className="login-host" 
-              placeholder="Host" 
-              value={this.state.host} 
-              onChange={(event) => this.hostChangeHandler(event)}></input>
-            <input 
-              className="login-port" 
-              placeholder="Port" 
-              value={this.state.port} 
-              onChange={(event) => this.portChangeHandler(event)}></input>
-            <a
-              className={"login-button"} 
-              onClick={this.handleConnection}
-              >
-              Connect
-            </a>
+            <p>Server not avaiable!</p>
           </div>
         </div> 
-    }else{
-      if(!isLogged) {
+    }else if(!isConnected && !isLogged){
+        content = 
+          <div className="welcome">
+            <div className="header">
+              <img className="logo" src={logo} alt="logo"/>
+              <div className="name">Hmm-Hmm</div>
+            </div>
+            <div className="login-form">
+              <input 
+                className="login-host" 
+                placeholder="Host" 
+                value={this.state.host} 
+                onChange={(event) => this.hostChangeHandler(event)}></input>
+              <input 
+                className="login-port" 
+                placeholder="Port" 
+                value={this.state.port} 
+                onChange={(event) => this.portChangeHandler(event)}></input>
+              <a
+                className={"login-button"} 
+                onClick={this.handleConnection}
+                >
+                Connect
+              </a>
+              {error}
+            </div>
+          </div> 
+    } else if (isConnected && !isLogged){
         content = 
         <div className="welcome">
               <div className="header">
@@ -253,7 +293,7 @@ class App extends Component {
                 </a>
               </div>
             </div> 
-      } else {
+      } else if (isConnected && isLogged){
         content = 
           <Main 
             currentFriend={this.state.currentFriend}
@@ -263,7 +303,6 @@ class App extends Component {
             handleSendMessage={this.handleSendMessage}
             currentUserHandler={this.currentUserHandler}
             />
-      }
     }
     return (
         <div className="App">

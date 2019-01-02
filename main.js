@@ -121,6 +121,10 @@ client.on('data', function(data) {
       case constants.USERS_LIST_CODE:
           mainWindow.send(constants.USERS_LIST,data);
           break;
+      case constants.SERVER_DISCONNECTED_CODE:
+          mainWindow.send(constants.SERVER_DISCONNECTED);
+          console.log('[SERVER DISCONNECTED]');
+          break;
       default:
         console.log("Message from server undefined");
         break;
@@ -128,8 +132,12 @@ client.on('data', function(data) {
 });
 
 ipcMain.on(constants.CONNECT,(event,arg)=>{
-  client.connect(arg.port, arg.host, function() {
-    console.log('[CONNECTED TO]' + arg.host + ':' + arg.host);
+  var con = client.connect(arg.port, arg.host, function() {
+    mainWindow.send(constants.SERVER_CONNECTED);
+    console.log('[CONNECTED TO]' + arg.host + ':' + arg.port);
+  });
+  con.on('error', function(){
+    mainWindow.send(constants.SERVER_CONNECTION_FAILURE);
   });
 })
 
@@ -141,4 +149,8 @@ ipcMain.on(constants.SUBMIT_USERNAME,(event,arg)=>{
 ipcMain.on(constants.WRITE_MESSAGE,(event,arg)=>{
   client.write(arg);
   console.log(arg+'');
+})
+
+process.on('uncaughtException', function (error) {
+  console.log("[ERROR]",error)
 })

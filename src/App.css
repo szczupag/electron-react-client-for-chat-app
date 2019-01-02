@@ -217,6 +217,12 @@ body{
   background-color: rgb(224, 165, 0);
 }
 
+.error-msg{
+  font-size: 0.8rem;
+  color: red;
+  text-align: center;
+}
+
 @keyframes welcomeHeaderAnimation {
   0%{
     opacity: 0;
