@@ -10,7 +10,7 @@ Server: C/C++ with API BSD Sockets
 
 Client: Electron with React
 
-### To get started:
+## To get started:
 * Get source code `git clone https://github.com/szczupag/electron-react-client-for-chat-app`
 * Run `npm install`
 * Run `npm run dev` to start webpack-dev-server. Electron will launch automatically after compilation.
