@@ -240,7 +240,7 @@ class App extends Component {
             <div className="name">Hmm-Hmm</div>
           </div>
           <div className="login-form">
-            <p>Server not avaiable!</p>
+            <p>Server not available!</p>
           </div>
         </div> 
     }else if(!isConnected && !isLogged){
