@@ -114,6 +114,10 @@ body{
   margin-left: auto;
 }
 
+.message.from-current-friend{
+  margin-right: auto;
+}
+
 .message.message.to-current-friend .message-username{
   text-align: right;
   padding-right: 8px;
