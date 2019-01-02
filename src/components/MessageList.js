@@ -29,7 +29,7 @@ class MessageList extends React.Component {
                         className="message from-current-friend"
                         key={index}>
                         <div className="message-username">{message.from}</div>
-                        <div className="message-text">{message.message}</div>
+                        <div className="message-text"><p>{message.message}</p></div>
                     </div>
                 )
             }else if (message.to == this.state.currentFriend && message.from == this.props.username){
@@ -38,7 +38,7 @@ class MessageList extends React.Component {
                         className="message to-current-friend"
                         key={index}>
                         <div className="message-username">{message.from}</div>
-                        <div className="message-text">{message.message}</div>
+                        <div className="message-text"><p>{message.message}</p></div>
                     </div>
                 )
             }
