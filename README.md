@@ -25,6 +25,7 @@ Client: Electron with React
 * Run `nc -l [port] [host]`
 
 ## Communication protocol:
+### Handling messages from server
 * `200;username` `NEW_USER`
 * `300;username` `USER_LEFT`
 * `400;message` `MESSAGE_RECEIVED`
