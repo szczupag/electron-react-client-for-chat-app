@@ -1,315 +1,281 @@
-
 import {ipcRenderer} from 'electron';
-
 import React, { Component } from 'react';
-import logo from './assets/img/hmmm.png';
+import axios from './axios';
 
-import './App.css';
-import Main from './components/Main';
-const constants = require('./constants');
+import './css/App.css';
+import './css/Logo.css';
+
+import Welcome from './components/Welcome';
+import Home from './components/Home';
+
+import Clinics from './components/clinics/Clinics';
+import NewClinic from './components/clinics/NewClinic';
+import EditClinic from './components/clinics/EditClinic';
+
+import Departments from './components/departments/Departments';
+import NewDepartment from './components/departments/NewDepartment';
+import EditDepartment from './components/departments/EditDepartment';
+
+import Localizations from './components/localizations/Localizations';
+import NewLocalization from './components/localizations/NewLocalization';
+import EditLocalization from './components/localizations/EditLocalization';
+
+import Doctors from './components/doctors/Doctors';
+import NewDoctor from './components/doctors/NewDoctor';
+import EditDoctor from './components/doctors/EditDoctor';
+
+import Diseases from './components/diseases/Diseases';
+import NewDisease from './components/diseases/NewDisease';
+import EditDisease from './components/diseases/EditDisease';
+
+import MedicalProcedures from './components/medical-procedures/MedicalProcedures';
+import NewMedicalProcedure from './components/medical-procedures/NewMedicalProcedure';
+import EditMedicalProcedure from './components/medical-procedures/EditMedicalProcedure';
+
+const constants = require('./constants/pages');
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      host: '127.0.0.1',
-      port: '1234',
-      submitClass: ' disabled-btn',
-      isLogged: false,
-      isConnected: false,
-      validConnection: true,
-      usersList: undefined,
-      messages: [],
-      currentFriend: 'no friends online'
-    };
-    this.usernameChangeHandler = this.usernameChangeHandler.bind(this);
-    this.hostChangeHandler = this.hostChangeHandler.bind(this);
-    this.portChangeHandler = this.portChangeHandler.bind(this);
-    this.handleUsernameSubmit = this.handleUsernameSubmit.bind(this);
-    this.handleConnection = this.handleConnection.bind(this);
-    this.handleUsersList = this.handleUsersList.bind(this);
-    this.handleNewUser = this.handleNewUser.bind(this);
-    this.handleNewMessage = this.handleNewMessage.bind(this);
-    this.handleUserLeft = this.handleUserLeft.bind(this);
-    this.handleSendMessage = this.handleSendMessage.bind(this);
-    this.currentUserHandler = this.currentUserHandler.bind(this);
-    this.handleServerDisconnected = this.handleServerDisconnected.bind(this);
-    this.handleServerConnected = this.handleServerConnected.bind(this);
-    this.handleServerConnectionFailure = this.handleServerConnectionFailure.bind(this);
-  }
+    constructor(props){
+        super(props)
+        this.state = {
+            panel: constants.WELCOME,
+            edit: null,
+            clinics: [],
+            departments: [],
+            localizations: [],
+            doctors: [],
+            medicalProcedures: [],
+            diseases: [],
+            patients: [],
+            treatments: [],
+            visits: [],
+            visitors: []
+        }
+        this.changePanel = this.changePanel.bind(this);
+        this.editItemHandler = this.editItemHandler.bind(this);
 
-  componentDidMount(){
-    ipcRenderer.on(constants.USERS_LIST,this.handleUsersList);
-    ipcRenderer.on(constants.NEW_USER,this.handleNewUser);
-    ipcRenderer.on(constants.MESSAGE_RECEIVED,this.handleNewMessage);
-    ipcRenderer.on(constants.USER_LEFT,this.handleUserLeft);
-    ipcRenderer.on(constants.SERVER_DISCONNECTED,this.handleServerDisconnected);
-    ipcRenderer.on(constants.SERVER_CONNECTED, this.handleServerConnected);
-    ipcRenderer.on(constants.SERVER_CONNECTION_FAILURE, this.handleServerConnectionFailure);
-  }
-
-  componentWillUnmount(){
-    ipcRenderer.removeListener(constants.USERS_LIST,this.handleUsersList);
-    ipcRenderer.removeListener(constants.NEW_USER,this.handleNewUser);
-    ipcRenderer.removeListener(constants.MESSAGE_RECEIVED,this.handleNewMessage);
-    ipcRenderer.removeListener(constants.USER_LEFT,this.handleUserLeft);
-    ipcRenderer.removeListener(constants.SERVER_DISCONNECTED,this.handleServerDisconnected);
-    ipcRenderer.removeListener(constants.SERVER_CONNECTED, this.handleServerConnected);
-    ipcRenderer.removeListener(constants.SERVER_CONNECTION_FAILURE, this.handleServerConnectionFailure);
-  }
-
-  //200;newuser
-  handleNewUser(event, data){
-    var strData = data + '';
-    var arrayData = strData.split(";");
-    if(this.state.usersList!=undefined){
-      var newUsersList = [...this.state.usersList, arrayData[1]];
-      this.setState({
-        usersList: newUsersList,
-        currentFriend: newUsersList[0]
-      })
-    }else{
-      var newUsersList = [arrayData[1]];
-      this.setState({
-        usersList: newUsersList,
-        currentFriend: arrayData[1]
-      })
+        this.getHandler = this.getHandler.bind(this);
+        this.deleteHandler = this.deleteHandler.bind(this);
+        this.postHandler = this.postHandler.bind(this);
+        this.putHandler = this.putHandler.bind(this);
     }
-    console.log('[APP 200] new user append ',this.state.usersList);
-  }
 
-  //300;user
-  handleUserLeft(event,data){
-    var strData = data + '';
-    var arrayData = strData.split(";");
-    var newUsersList = this.state.usersList.filter((user)=>{
-      return user != arrayData[1];
-    })
-    if(newUsersList.length != 0){
-      this.setState({
-        usersList: newUsersList,
-      })
-    } else {
-      this.setState({
-        usersList: undefined,
-        currentFriend: 'no friends online'
-      })
+//----------------- DATABASE HANDLERS -----------------
+    getHandler(table){
+      axios.get( `/${table}/all` )
+          .then( response => {
+              const newData = response.data;
+              switch (table){
+                case constants.CLINICS:
+                   this.setState({clinics: newData});
+                case constants.DEPARTMENTS:
+                   this.setState({departments: newData});
+                case constants.LOCALIZATIONS:
+                  this.setState({localizations: newData});
+                case constants.DOCTORS:
+                  this.setState({doctors: newData});
+                case constants.DISEASES:
+                  this.setState({diseases: newData});
+                case constants.MEDICAL_PROCEDURES:
+                  this.setState({medicalProcedures: newData});
+                case constants.PATEINTS:
+                  this.setState({patients: newData});
+                case constants.TREATMENTS:
+                 this.setState({treatments: newData});
+                case constants.VISITS:
+                 this.setState({visits: newData});
+                case constants.VISITORS:
+                 this.setState({visitors: newData});
+                default:
+                  break;
+              }
+          })
+          .catch( error => {
+              console.log(error);
+          });
     }
-    console.log('[APP 300] user left',arrayData[1], newUsersList.length);
-  }
-
-  //400;user;message
-  handleNewMessage(event, data){
-    var strData = data + '';
-    var arrayData = strData.split(";");
-    var newMessage = {
-      from: arrayData[1],
-      to: this.state.username,
-      message: arrayData[2]
+    deleteHandler(table,id){
+        axios.delete(`/${table}/${id}`)
+            .then( response => {
+                console.log(response);
+                this.getHandler(table);
+            })
+            .catch( error => {
+                console.log(error);
+            });
     }
-    var newMessages = [...this.state.messages, newMessage]
-    this.setState({
-      messages: newMessages
-    })
-    console.log('[APP 400] new message received ',arrayData[2]);
-  }
-
-  //500;user1;user2...
-  handleUsersList(event, data){
-    var strData = data + '';
-    var arrayData = strData.split(";");
-    arrayData.shift();
-    arrayData.splice(-1,1);
-    if(arrayData[0]!=undefined){
-      this.setState({
-        usersList: arrayData,
-        currentFriend: arrayData[0]
-      })
-    }else{
-      this.setState({
-        usersList: undefined,
-        currentFriend: 'no friends online'
-      })
+    putHandler(table, data){
+        let id;
+        if(table == constants.DOCTORS){
+          id = data.pesel;
+        }else{
+          id = data.id;
+        }
+        axios.put(`/${table}/${id}`,data)
+            .then( response => {
+              console.log(response);
+              this.getHandler(table);
+            })
+            .catch( error => {
+                console.log(error);
+            });
     }
-    console.log('[APP 500] users list received', this.state.usersList);
-  }
-
-  //600;
-  handleServerDisconnected(){
-    this.setState({isConnected: false});
-  }
-
-  handleServerConnected(){
-    this.setState({
-      isConnected: true
-    });
-  }
-
-  handleServerConnectionFailure(){
-    this.setState({validConnection: false})
-  }
-
-  //to;message
-  handleSendMessage(message){
-    var strData = this.state.currentFriend+";"+message+";";
-    ipcRenderer.send(constants.WRITE_MESSAGE,strData);
-    var newMessage = {
-      from: this.state.username,
-      to: this.state.currentFriend,
-      message: message
+    postHandler(table, data){
+        axios.post(`/${table}`,data)
+            .then( response => {
+                console.log(response);
+                this.getHandler(table);
+            })
+            .catch( error => {
+                console.log(error);
+            });
     }
-    var newMessages = [...this.state.messages, newMessage]
-    this.setState({
-      messages: newMessages
-    })
-    console.log("[APP] message send",strData);
-  }
+//----------------- END DB HANDLERS -----------------
 
-  hostChangeHandler(event){
-    if(event.target.value !== ''){
-      this.setState({
-        host: event.target.value,
-      })
-    } else {
-      this.setState({
-        host: event.target.value,
-      })
+    editItemHandler(itemData){
+      this.setState({edit: itemData});
     }
-  }
 
-  portChangeHandler(event){
-    if(event.target.value !== ''){
-      this.setState({
-        port: event.target.value,
-      })
-    } else {
-      this.setState({
-        port: event.target.value,
-      })
+    changePanel(panel){
+      this.setState({panel: panel})
     }
-  }
 
-  usernameChangeHandler(event){
-    if(event.target.value !== ''){
-      this.setState({
-        username: event.target.value,
-        submitClass: ''
-      })
-    } else {
-      this.setState({
-        username: event.target.value,
-        submitClass: ' disabled-btn'
-      })
+    panelSwitch(){
+      switch (this.state.panel){
+          case constants.EDIT_MEDICAL_PROCEDURE:
+            return <EditMedicalProcedure
+              changePanel={this.changePanel}
+              data={this.state.edit}
+              putHandler={this.putHandler}
+            />;
+          case constants.NEW_MEDICAL_PROCEDURE:
+            return <NewMedicalProcedure
+              changePanel={this.changePanel}
+              postHandler={this.postHandler}
+            />;
+          case constants.MEDICAL_PROCEDURES:
+            return <MedicalProcedures
+              medicalProcedures={this.state.medicalProcedures}
+              changePanel={this.changePanel}
+              getHandler={this.getHandler}
+              deleteHandler={this.deleteHandler}
+              editItemHandler={this.editItemHandler}
+              changePanel={this.changePanel}
+            />;
+          case constants.EDIT_DISEASE:
+            return <EditDisease
+              changePanel={this.changePanel}
+              data={this.state.edit}
+              putHandler={this.putHandler}
+            />;
+          case constants.NEW_DISEASE:
+            return <NewDisease
+              changePanel={this.changePanel}
+              postHandler={this.postHandler}
+            />;
+          case constants.DISEASES:
+            return <Diseases
+              diseases={this.state.diseases}
+              changePanel={this.changePanel}
+              getHandler={this.getHandler}
+              deleteHandler={this.deleteHandler}
+              editItemHandler={this.editItemHandler}
+              changePanel={this.changePanel}
+            />;
+          case constants.EDIT_DOCTOR:
+            return <EditDoctor
+              changePanel={this.changePanel}
+              data={this.state.edit}
+              putHandler={this.putHandler}
+            />;
+          case constants.NEW_DOCTOR:
+            return <NewDoctor
+              changePanel={this.changePanel}
+              postHandler={this.postHandler}
+            />;
+          case constants.DOCTORS:
+            return <Doctors
+              doctors={this.state.doctors}
+              changePanel={this.changePanel}
+              getHandler={this.getHandler}
+              deleteHandler={this.deleteHandler}
+              editItemHandler={this.editItemHandler}
+              changePanel={this.changePanel}
+            />;
+          case constants.EDIT_LOCALIZATION:
+            return <EditLocalization
+              changePanel={this.changePanel}
+              data={this.state.edit}
+              putHandler={this.putHandler}
+            />;
+          case constants.NEW_LOCALIZATION:
+            return <NewLocalization
+              changePanel={this.changePanel}
+              postHandler={this.postHandler}
+            />;
+          case constants.LOCALIZATIONS:
+            return <Localizations
+              localizations={this.state.localizations}
+              changePanel={this.changePanel}
+              getHandler={this.getHandler}
+              deleteHandler={this.deleteHandler}
+              editItemHandler={this.editItemHandler}
+              changePanel={this.changePanel}
+            />;
+          case constants.EDIT_DEPARTMENT:
+            return <EditDepartment
+              changePanel={this.changePanel}
+              data={this.state.edit}
+              putHandler={this.putHandler}
+            />;
+          case constants.NEW_DEPARTMENT:
+            return <NewDepartment
+              changePanel={this.changePanel}
+              postHandler={this.postHandler}
+            />;
+          case constants.DEPARTMENTS:
+            return <Departments 
+              departments={this.state.departments}
+              changePanel={this.changePanel}
+              getHandler={this.getHandler}
+              deleteHandler={this.deleteHandler}
+              editItemHandler={this.editItemHandler}
+              changePanel={this.changePanel}
+            />;
+          case constants.EDIT_CLINIC:
+            return <EditClinic 
+              changePanel={this.changePanel}
+              data={this.state.edit}
+              putHandler={this.putHandler}
+            />;
+          case constants.NEW_CLINIC:
+            return <NewClinic 
+              changePanel={this.changePanel}
+              postHandler={this.postHandler}
+            />;
+          case constants.CLINICS:
+            return <Clinics 
+              clinics={this.state.clinics}
+              changePanel={this.changePanel}
+              getHandler={this.getHandler}
+              deleteHandler={this.deleteHandler}
+              editItemHandler={this.editItemHandler}
+              changePanel={this.changePanel}
+            />;
+          case constants.WELCOME:
+            return <Welcome changePanel={this.changePanel}/>;
+          case constants.HOME:
+            return <Home changePanel={this.changePanel}/>;
+      }
     }
-  }
 
-  handleUsernameSubmit(){
-    this.setState({isLogged: true});
-    ipcRenderer.send(constants.SUBMIT_USERNAME,this.state.username);
-  }
-
-  handleConnection(){
-    var connectionData = {
-      port: this.state.port,
-      host: this.state.host
-    }
-    ipcRenderer.send(constants.CONNECT,connectionData);
-  }
-
-  currentUserHandler(user){
-    this.setState({
-        currentFriend: user
-    })
-  }
-
-  render() {
-    var isValidConnection = this.state.validConnection;
-    var isConnected = this.state.isConnected;
-    var isLogged = this.state.isLogged;
-    let content;
-    let error;
-    if(!isValidConnection){
-      error = <p className="error-msg">Couldn't connect to the server</p>
-    }
-    if(!isConnected && isLogged){
-      content = 
-        <div className="welcome">
-          <div className="header">
-            <img className="logo" src={logo} alt="logo"/>
-            <div className="name">Hmm-Hmm</div>
+    render() {
+        return (
+          <div className={"App " + this.state.panel}>
+              {this.panelSwitch()}
           </div>
-          <div className="login-form">
-            <p>Server not available!</p>
-          </div>
-        </div> 
-    }else if(!isConnected && !isLogged){
-        content = 
-          <div className="welcome">
-            <div className="header">
-              <img className="logo" src={logo} alt="logo"/>
-              <div className="name">Hmm-Hmm</div>
-            </div>
-            <div className="login-form">
-              <input 
-                className="login-host" 
-                placeholder="Host" 
-                value={this.state.host} 
-                onChange={(event) => this.hostChangeHandler(event)}></input>
-              <input 
-                className="login-port" 
-                placeholder="Port" 
-                value={this.state.port} 
-                onChange={(event) => this.portChangeHandler(event)}></input>
-              <a
-                className={"login-button"} 
-                onClick={this.handleConnection}
-                >
-                Connect
-              </a>
-              {error}
-            </div>
-          </div> 
-    } else if (isConnected && !isLogged){
-        content = 
-        <div className="welcome">
-              <div className="header">
-                <img className="logo" src={logo} alt="logo"/>
-                <div className="name">Hmm-Hmm</div>
-              </div>
-              <div className="login-form">
-                <input 
-                  id="usernameInput"
-                  className="login-username" 
-                  placeholder="Username" 
-                  value={this.state.username} 
-                  onChange={(event) => this.usernameChangeHandler(event)}></input>
-                <a
-                  id="connectBtn"
-                  className={"login-button"+this.state.submitClass} 
-                  onClick={this.handleUsernameSubmit}
-                  >
-                  Submit
-                </a>
-              </div>
-            </div> 
-      } else if (isConnected && isLogged){
-        content = 
-          <Main 
-            currentFriend={this.state.currentFriend}
-            username={this.state.username}
-            usersList={this.state.usersList}
-            messages={this.state.messages}
-            handleSendMessage={this.handleSendMessage}
-            currentUserHandler={this.currentUserHandler}
-            />
+        );
     }
-    return (
-        <div className="App">
-          {content}
-        </div>
-    );
-  }
 }
 
 export default App;

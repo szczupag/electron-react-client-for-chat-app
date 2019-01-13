@@ -1,0 +1,215 @@
+html, body, #root, .App{
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  min-height:100%;
+  overflow-y:auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+.App {
+  background-color: #fff;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+.App.home,
+.App.welcome{
+  text-align: center;
+  background-color: #282c34;
+}
+
+.subtitle,
+h1{
+  color: white;
+}
+
+p{
+  margin: 0;
+}
+
+/* BUTTONS */
+
+.default-btn{
+  padding: 10px 30px;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 50px;
+  border: 2px solid #fff;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.home .default-btn,
+.default-btn.back{
+  padding: 5px 20px;
+  font-size: 11px;
+}
+
+.default-btn:hover{
+  color: #fff;
+  background-color: #282c34;
+}
+
+.controls-btn{
+  padding: 5px 20px;
+  margin-right: 4px;
+  font-weight: bold;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  background-color: #282c34;
+}
+
+.controls-btn:hover{
+  color: #282c34;
+  background-color: #fff;
+}
+
+.controls-btn.add:hover{
+  background-color: rgb(84, 221, 107);
+}
+
+.controls-btn.edit:hover{
+  background-color: rgb(84, 205, 221);
+}
+
+.controls-btn.delete:hover{
+  background-color: rgb(221, 84, 84);
+}
+
+/* ---- */
+
+.page-title{
+  padding: 20px;
+  background-color: #282c34;
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.elements{
+  padding: 20px;
+  max-width: 500px;
+  margin: auto;
+}
+
+
+/* HOME */
+
+.home .page-title{
+  background-color: #fff;
+  color: #282c34;
+}
+
+.home .options{
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+.home .options > *{
+  margin: 10px 0; 
+}
+
+.home .subtitle{
+  margin-bottom: 30px;
+}
+
+/* ---- */
+
+/* ITEM */
+
+.item-wrapper{
+  padding: 0px;
+  margin-bottom: 20px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.432);
+}
+
+.item-header{
+  color: #fff;
+  background-color: #282c34;
+  padding: 10px;
+  text-align: center;
+}
+
+.item-content{
+  padding: 20px;
+}
+
+.item-content p{
+  padding-left: 20px;
+}
+
+.item-content  .label{
+  padding: 5px 0;
+  color: rgb(177, 177, 177);
+  font-size: 0.8rem;
+}
+
+.controls{
+  padding: 20px 10px;
+  margin: 0;
+}
+
+.options{
+  display: flex;
+  justify-content: center;
+  padding: 30px 20px 10px 20px;
+}
+
+.empty{
+  padding-left: 20px;
+  color: rgb(177, 177, 177);
+  font-style: italic;
+}
+
+.item-footer{
+  display: flex;
+  justify-content: center;
+}
+
+/* ---- */
+
+/* NEW or EDIT ITEM */
+
+.form{
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.432);
+}
+
+.form-panel .item-content{
+  display: flex;
+  flex-direction: column;
+}
+
+.form-panel .item-content > * {
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.form-panel .item-footer{
+  display: flex;
+  flex-direction: column;
+}
+
+.form-panel .controls,
+.form-error{
+  display: block;
+  margin: auto;
+}
+
+.form-error{
+  color: rgb(221, 84, 84);
+  font-size: 11px;
+}
+
+/* ---- */
+
+

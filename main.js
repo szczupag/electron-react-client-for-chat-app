@@ -1,9 +1,11 @@
 'use strict';
 
-const constants = require('./src/constants');
+const constants = require('./src/constants/main');
+
+// Then use it before your routes are set up:
 
 // Import parts of electron to use
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow} = require('electron');
 const path = require('path')
 const url = require('url')
 
@@ -46,7 +48,7 @@ function createWindow() {
     mainWindow.show();
     // Open the DevTools automatically if developing
     // if ( dev ) {
-      // mainWindow.webContents.openDevTools();
+      mainWindow.webContents.openDevTools();
     // }
   });
 
@@ -82,74 +84,6 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-var net = require('net');
-var HOST = constants.HOST;
-var PORT = constants.PORT;
-var client = new net.Socket(); 
-
-var opts;
-var player = require('play-sound')(opts={});
-// var loginMusic = player.play('./src/assets/menu.m4a',function(err){
-//   if (err && !err.killed) throw err
-// });
-
-client.on('data', function(data) {
-  console.log('[DATA FROM SERVER]' + data);
-  var strData = data+'';
-  var messageType = strData.split(";");
-  switch (messageType[0]){
-      case constants.NEW_USER_CODE:
-          mainWindow.send(constants.NEW_USER,data);
-          player.play('./src/assets/online.m4a', function(err){
-            if (err) throw err
-          })
-          break;
-      case constants.USER_LEFT_CODE:
-          mainWindow.send(constants.USER_LEFT, data);
-          player.play('./src/assets/online.m4a', function(err){
-            if (err) throw err
-          })
-          break;
-      case constants.MESSAGE_RECEIVED_CODE:
-          mainWindow.send(constants.MESSAGE_RECEIVED,data);
-          console.log('[MESSAGE RECEIVED]',data+'');
-          player.play('./src/assets/gg.m4a', function(err){
-            if (err) throw err
-          })
-          break;
-      case constants.USERS_LIST_CODE:
-          mainWindow.send(constants.USERS_LIST,data);
-          break;
-      case constants.SERVER_DISCONNECTED_CODE:
-          mainWindow.send(constants.SERVER_DISCONNECTED);
-          console.log('[SERVER DISCONNECTED]');
-          break;
-      default:
-        console.log("Message from server undefined");
-        break;
-  }
-});
-
-ipcMain.on(constants.CONNECT,(event,arg)=>{
-  var con = client.connect(arg.port, arg.host, function() {
-    mainWindow.send(constants.SERVER_CONNECTED);
-    console.log('[CONNECTED TO]' + arg.host + ':' + arg.port);
-  });
-  con.on('error', function(){
-    mainWindow.send(constants.SERVER_CONNECTION_FAILURE);
-  });
-})
-
-ipcMain.on(constants.SUBMIT_USERNAME,(event,arg)=>{
-  client.write(arg);
-  // loginMusic.kill();
-})
-
-ipcMain.on(constants.WRITE_MESSAGE,(event,arg)=>{
-  client.write(arg);
-  console.log(arg+'');
-})
 
 process.on('uncaughtException', function (error) {
   console.log("[ERROR]",error)

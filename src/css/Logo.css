@@ -1,0 +1,37 @@
+#Logo {
+    height: 50vh;
+    width: 50vh;
+  }
+  
+  .st0{fill:none;}
+  .st1{fill:none;stroke:#525252;stroke-miterlimit:10;}
+  .st2{fill:none;stroke:#525252;stroke-width:2;stroke-miterlimit:10;}
+  
+  @keyframes offset {
+    to {
+        stroke-dashoffset: 0;
+    }
+  }
+  
+  #First, #Second, #Third, #Fourth{
+    animation: offset 2s linear forwards;
+  }
+  #First {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+  }
+  #Second {
+    stroke-dasharray: 250;
+    stroke-dashoffset: 250;
+    animation-delay: .25s;
+  }
+  #Third {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation-delay: .75s;
+  }
+  #Fourth {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation-delay: 1s;
+  }
