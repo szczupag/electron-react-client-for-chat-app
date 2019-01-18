@@ -11,6 +11,10 @@ const Localization = props => {
                 <p>{props.data.postalCode}</p>
                 <p className="label">street:</p>
                 <p>{props.data.street}</p>
+                <p className="label">building number:</p>
+                <p>{props.data.buildingNo}</p>
+                <p className="label">clinic:</p>
+                <p>{props.data.clinic!=undefined?props.data.clinic:"No clinic at this location"}</p>
             </div>
             <div className="item-footer">
                 <div className="controls">

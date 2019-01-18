@@ -1,18 +1,30 @@
 import React, {Component} from 'react';
 import constants from '../../constants/pages';
+import Select from 'react-select';
 
 class NewLocalization extends Component {
     constructor(props){
         super(props)
+        let clinicsMap = this.props.clinics.map((clinic)=>{
+            if (clinic.localization===undefined) {
+                return { value: clinic, label: clinic.name+" "+clinic.type}
+            }
+        });
+        clinicsMap.filter(function(el){return el != undefined;});
         this.state={
             city: '',
             postalCode: '',
             street: '',
+            buildingNo: '',
+            clinics: clinicsMap[0]!=undefined?clinicsMap:[],
+            clinic: null,
             error: null
         }
         this.cityChangeHandler = this.cityChangeHandler.bind(this);
         this.postalCodeChangeHandler = this.postalCodeChangeHandler.bind(this);
         this.streetChangeHandler = this.streetChangeHandler.bind(this);
+        this.buildingNoChangeHandler = this.buildingNoChangeHandler.bind(this);
+        this.clinicChangeHandler = this.clinicChangeHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
     }
 
@@ -28,21 +40,36 @@ class NewLocalization extends Component {
         this.setState({street: e.target.value})
     }
 
+    buildingNoChangeHandler(e){
+        this.setState({buildingNo: e.target.value})
+    }
+
+    clinicChangeHandler(selectedClinic){
+        this.setState({clinic: selectedClinic});
+    }
+
     submitHandler(){
-        if( this.state.city != '' && this.state.postalCode!='' && this.state.street!='' ){
-            const data = {
-                city: this.state.city,
-                postalCode: this.state.postalCode,
-                street: this.state.street
+        const clinicId = this.state.clinic!=null ? this.state.clinic.value.id : null;
+        if(Number.isInteger(parseInt(this.state.buildingNo))){
+            if( this.state.city != '' && this.state.postalCode!='' && this.state.street!='' ){
+                const data = {
+                    city: this.state.city,
+                    postalCode: this.state.postalCode,
+                    street: this.state.street,
+                    buildingNo: parseInt(this.state.buildingNo),
+                    clinic: clinicId
+                }
+                console.log(data);
+                this.props.postHandler(constants.LOCALIZATIONS, data);
+                this.props.changePanel(constants.LOCALIZATIONS);
+            }else{
+                this.setState({error: 'Not all required inputs are filled!'})
             }
-            console.log(data);
-            this.props.postHandler(constants.LOCALIZATIONS, data);
-            this.props.changePanel(constants.LOCALIZATIONS);
         }else{
-            this.setState({error: 'Not all required inputs are filled!'})
+            this.setState({error: 'Wrong input type!'})
         }
     }
-    
+
     render(){
         return(
             <div className="form-panel">
@@ -67,6 +94,18 @@ class NewLocalization extends Component {
                             placeholder="Street*"
                             value={this.state.street}
                             onChange={(e)=>this.streetChangeHandler(e)}></input>
+                        <input
+                            placeholder="Building number*"
+                            value={this.state.buildingNo}
+                            onChange={(e)=>this.buildingNoChangeHandler(e)}></input>
+                        <Select
+                            name="cli-for-loc"
+                            placeholder="Clinic*"
+                            className="selectBox"
+                            value={this.state.clinic}
+                            onChange={this.clinicChangeHandler}
+                            options={this.state.clinics}
+                        />
                     </div>
                     <div className="item-footer">
                         {this.state.error != null ? <p className="form-error">{this.state.error}</p> : null}

@@ -1,33 +1,34 @@
 import React, {Component} from 'react';
 import constants from '../../constants/pages';
-import Localization from './Localization';
+import Visitor from './Visitor';
 
-class Localizations extends Component {
+class Visitors extends Component {
     constructor(props){
         super(props)
         this.state = {
-            localizations: []
+            visitors: []
         }
     }
 
     componentDidMount () {
-        this.props.getHandler(constants.LOCALIZATIONS);
+        this.props.getHandler(constants.VISITORS);
         this.setState({
-            localizations: this.props.localizations
+            visitors: this.props.visitors
         })
+        console.log(this.state.visitors)
     }
 
     componentWillReceiveProps(newProps){
         this.setState({
-            localizations: newProps.localizations
+            visitors: newProps.visitors
         })
     }
 
     render(){
         return(
-            <div className="localizations">
+            <div className="visitors">
                 <div className="page-title">
-                    <span>Localizations</span>
+                    <span>visitors</span>
                     <button 
                         className="default-btn back"
                         onClick={()=>this.props.changePanel(constants.HOME)}
@@ -36,15 +37,15 @@ class Localizations extends Component {
                 <div className="options">
                     <button 
                         className="controls-btn add"
-                        onClick={()=>this.props.changePanel(constants.NEW_LOCALIZATION)}
-                    >Add new localizations</button>
+                        onClick={()=>this.props.changePanel(constants.NEW_VISITOR)}
+                    >Add new visitor</button>
                 </div>
                 <div className="elements">
                 {
-                    this.state.localizations.map( (localization, index) => {
-                        return <Localization
+                    this.state.visitors.map( (visitor, index) => {
+                        return <Visitor
                             key={index} 
-                            data={localization}
+                            data={visitor}
                             deleteHandler={this.props.deleteHandler}
                             editItemHandler={this.props.editItemHandler}
                             changePanel={this.props.changePanel}
@@ -57,4 +58,4 @@ class Localizations extends Component {
     }
 }
 
-export default Localizations;
+export default Visitors;

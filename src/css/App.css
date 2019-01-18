@@ -210,6 +210,15 @@ p{
   font-size: 11px;
 }
 
+.selectBox{
+  padding: 0 !important;
+}
+
+.selectBox > div {
+  border-radius: 0;
+  font-size: 11px;
+}
+
 /* ---- */
 
 

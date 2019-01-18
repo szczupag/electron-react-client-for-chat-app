@@ -37,7 +37,7 @@ module.exports = Object.freeze({
 
     VISITS: 'visits',
     NEW_VISIT: 'new-visit',
-    EDIT_VISITS: 'edit-visit',
+    EDIT_VISIT: 'edit-visit',
 
     VISITORS: 'visitors',
     NEW_VISITOR: 'new-visitor',

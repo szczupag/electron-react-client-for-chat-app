@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import constants from '../../constants/pages';
+import Select from 'react-select';
 
 class EditLocalization extends Component {
     constructor(props){
@@ -8,11 +9,13 @@ class EditLocalization extends Component {
             city: this.props.data.city,
             postalCode: this.props.data.postalCode,
             street: this.props.data.street,
+            buildingNo: this.props.data.buildingNo,
             error: null
         }
         this.cityChangeHandler = this.cityChangeHandler.bind(this);
         this.postalCodeChangeHandler = this.postalCodeChangeHandler.bind(this);
         this.streetChangeHandler = this.streetChangeHandler.bind(this);
+        this.buildingNoChangeHandler = this.buildingNoChangeHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
     }
 
@@ -28,22 +31,31 @@ class EditLocalization extends Component {
         this.setState({street: e.target.value})
     }
 
+    buildingNoChangeHandler(e){
+        this.setState({buildingNo: e.target.value})
+    }
+
+    clinicChangeHandler(selectedClinic){
+        this.setState({clinic: selectedClinic});
+    }
+
     submitHandler(){
-        if( this.state.city != '' && this.state.postalCode!='' && this.state.street!='' ){
-            if( this.state.city != this.props.data.city || this.state.postalCode != this.props.data.postalCode){
+        if(Number.isInteger(parseInt(this.state.buildingNo))){
+            if( this.state.city != '' && this.state.postalCode!='' && this.state.street!='' ){
                 const data = {
                     id: this.props.data.id,
                     city: this.state.city,
                     postalCode: this.state.postalCode,
-                    street: this.state.street
+                    street: this.state.street,
+                    buildingNo: parseInt(this.state.buildingNo)
                 }
                 this.props.putHandler(constants.LOCALIZATIONS, data);
                 this.props.changePanel(constants.LOCALIZATIONS);
-            }else{
-                this.setState({error: 'There are no updates for this localization!'})
+            }else if( this.state.city == '' || this.state.postalCode =='' || this.state.street == '' ){
+                this.setState({error: 'Not all required inputs are filled!'})
             }
-        }else if( this.state.city == '' || this.state.postalCode =='' || this.state.street == '' ){
-            this.setState({error: 'Not all required inputs are filled!'})
+        }else{
+            this.setState({error: 'Wrong input type!'})
         }
     }
     
@@ -71,6 +83,18 @@ class EditLocalization extends Component {
                             placeholder="Street*"
                             value={this.state.street}
                             onChange={(e)=>this.streetChangeHandler(e)}></input>
+                        <input
+                            placeholder="Building number*"
+                            value={this.state.buildingNo}
+                            onChange={(e)=>this.buildingNoChangeHandler(e)}></input>
+                        <Select
+                            name="cli-for-loc"
+                            placeholder="Clinic*"
+                            className="selectBox"
+                            value={this.state.clinic}
+                            onChange={this.clinicChangeHandler}
+                            options={this.state.clinics}
+                        />
                     </div>
                     <div className="item-footer">
                         {this.state.error != null ? <p className="form-error">{this.state.error}</p> : null}

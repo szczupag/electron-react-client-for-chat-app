@@ -1,21 +1,19 @@
 import React from 'react';
 import constants from '../../constants/pages';
 
-const Doctor = props => {
+const Visit = props => {
     return(
         <div className="item-wrapper">
             <div className="item-header">
-                <p>{props.data.firstName+" "+props.data.lastName}</p>
+                <p>{props.data.patient.firstName+" "+props.data.patient.lastName}</p>
             </div>
             <div className="item-content">
-                <p className="label">pesel:</p>
-                <p>{props.data.pesel}</p>
-                <p className="label">salary:</p>
-                <p>{props.data.salary}</p>
-                <p className="label">speciality:</p>
-                <p>{props.data.speciality}</p>
-                <p className="label">supervisor id:</p>
-                <p>{props.data.supervisorId}</p>
+                <p className="label">visitor:</p>
+                <p>{props.data.visitor.firstName+" "+props.data.visitor.lastName}</p>
+                <p className="label">visit date:</p>
+                <p>{props.data.visitDate}</p>
+                <p className="label">end date:</p>
+                <p>{props.data.endDate}</p>
             </div>
             <div className="item-footer">
                 <div className="controls">
@@ -23,15 +21,15 @@ const Doctor = props => {
                         className="controls-btn edit" 
                         onClick={()=>{
                             props.editItemHandler(props.data);
-                            props.changePanel(constants.EDIT_DOCTOR);
+                            props.changePanel(constants.EDIT_VISIT);
                         }}>Edit</button>
                     <button 
                         className="controls-btn delete" 
-                        onClick={()=>props.deleteHandler(constants.DOCTORS,props.data.pesel)}>Delete</button>
+                        onClick={()=>props.deleteHandler(constants.VISITS,props.data.id)}>Delete</button>
                 </div>
             </div>
         </div>
     );
 }
 
-export default Doctor;
+export default Visit;

@@ -1,7 +1,7 @@
 import React from 'react';
 import constants from '../../constants/pages';
 
-const Doctor = props => {
+const Visitor = props => {
     return(
         <div className="item-wrapper">
             <div className="item-header">
@@ -10,12 +10,12 @@ const Doctor = props => {
             <div className="item-content">
                 <p className="label">pesel:</p>
                 <p>{props.data.pesel}</p>
-                <p className="label">salary:</p>
-                <p>{props.data.salary}</p>
-                <p className="label">speciality:</p>
-                <p>{props.data.speciality}</p>
-                <p className="label">supervisor id:</p>
-                <p>{props.data.supervisorId}</p>
+                <p className="label">phoneNumber:</p>
+                <p>{props.data.phoneNumber}</p>
+                <p className="label">id number:</p>
+                <p>{props.data.idNumber}</p>
+                <p className="label">visits:</p>
+                <p>{props.data.visits}</p>
             </div>
             <div className="item-footer">
                 <div className="controls">
@@ -23,15 +23,15 @@ const Doctor = props => {
                         className="controls-btn edit" 
                         onClick={()=>{
                             props.editItemHandler(props.data);
-                            props.changePanel(constants.EDIT_DOCTOR);
+                            props.changePanel(constants.EDIT_VISITOR);
                         }}>Edit</button>
                     <button 
                         className="controls-btn delete" 
-                        onClick={()=>props.deleteHandler(constants.DOCTORS,props.data.pesel)}>Delete</button>
+                        onClick={()=>props.deleteHandler(constants.VISITORS,props.data.pesel)}>Delete</button>
                 </div>
             </div>
         </div>
     );
 }
 
-export default Doctor;
+export default Visitor;

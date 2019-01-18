@@ -1,33 +1,34 @@
 import React, {Component} from 'react';
 import constants from '../../constants/pages';
-import Localization from './Localization';
+import Patient from './Patient';
 
-class Localizations extends Component {
+class Patients extends Component {
     constructor(props){
         super(props)
         this.state = {
-            localizations: []
+            patients: []
         }
     }
 
     componentDidMount () {
-        this.props.getHandler(constants.LOCALIZATIONS);
+        this.props.getHandler(constants.PATEINTS);
         this.setState({
-            localizations: this.props.localizations
+            patients: this.props.patients
         })
+        console.log(this.state.patients)
     }
 
     componentWillReceiveProps(newProps){
         this.setState({
-            localizations: newProps.localizations
+            patients: newProps.patients
         })
     }
 
     render(){
         return(
-            <div className="localizations">
+            <div className="patients">
                 <div className="page-title">
-                    <span>Localizations</span>
+                    <span>Patients</span>
                     <button 
                         className="default-btn back"
                         onClick={()=>this.props.changePanel(constants.HOME)}
@@ -36,15 +37,15 @@ class Localizations extends Component {
                 <div className="options">
                     <button 
                         className="controls-btn add"
-                        onClick={()=>this.props.changePanel(constants.NEW_LOCALIZATION)}
-                    >Add new localizations</button>
+                        onClick={()=>this.props.changePanel(constants.NEW_PATIENT)}
+                    >Add new patient</button>
                 </div>
                 <div className="elements">
                 {
-                    this.state.localizations.map( (localization, index) => {
-                        return <Localization
+                    this.state.patients.map( (patient, index) => {
+                        return <Patient
                             key={index} 
-                            data={localization}
+                            data={patient}
                             deleteHandler={this.props.deleteHandler}
                             editItemHandler={this.props.editItemHandler}
                             changePanel={this.props.changePanel}
@@ -57,4 +58,4 @@ class Localizations extends Component {
     }
 }
 
-export default Localizations;
+export default Patients;

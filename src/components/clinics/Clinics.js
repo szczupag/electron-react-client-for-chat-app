@@ -19,7 +19,8 @@ class Clinics extends Component {
 
     componentWillReceiveProps(newProps){
         this.setState({
-            clinics: newProps.clinics
+            clinics: newProps.clinics,
+            localizations: newProps.localizations
         })
     }
 

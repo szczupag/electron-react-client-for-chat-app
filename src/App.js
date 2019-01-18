@@ -32,13 +32,29 @@ import MedicalProcedures from './components/medical-procedures/MedicalProcedures
 import NewMedicalProcedure from './components/medical-procedures/NewMedicalProcedure';
 import EditMedicalProcedure from './components/medical-procedures/EditMedicalProcedure';
 
+import Patients from './components/patients/Patients';
+import NewPatient from './components/patients/NewPatient';
+import EditPatient from './components/patients/EditPatient';
+
+import Treatments from './components/treatments/Treatments';
+import NewTreatment from './components/treatments/NewTreatment';
+import EditTreatment from './components/treatments/EditTreatment';
+
+import Visits from './components/visits/Visits';
+import NewVisit from './components/visits/NewVisit';
+import EditVisit from './components/visits/EditVisit';
+
+import Visitors from './components/visitors/Visitors';
+import NewVisitor from './components/visitors/NewVisitor';
+import EditVisitor from './components/visitors/EditVisitor';
+
 const constants = require('./constants/pages');
 
 class App extends Component {
     constructor(props){
         super(props)
         this.state = {
-            panel: constants.WELCOME,
+            panel: constants.HOME,
             edit: null,
             clinics: [],
             departments: [],
@@ -60,6 +76,11 @@ class App extends Component {
         this.putHandler = this.putHandler.bind(this);
     }
 
+    componentDidMount(){
+      this.getHandler(constants.LOCALIZATIONS);
+      this.getHandler(constants.CLINICS);
+    }
+
 //----------------- DATABASE HANDLERS -----------------
     getHandler(table){
       axios.get( `/${table}/all` )
@@ -68,24 +89,34 @@ class App extends Component {
               switch (table){
                 case constants.CLINICS:
                    this.setState({clinics: newData});
+                   break;
                 case constants.DEPARTMENTS:
                    this.setState({departments: newData});
+                   break;
                 case constants.LOCALIZATIONS:
                   this.setState({localizations: newData});
+                  break;
                 case constants.DOCTORS:
                   this.setState({doctors: newData});
+                  break;
                 case constants.DISEASES:
                   this.setState({diseases: newData});
+                  break;
                 case constants.MEDICAL_PROCEDURES:
                   this.setState({medicalProcedures: newData});
+                  break;
                 case constants.PATEINTS:
                   this.setState({patients: newData});
+                  break;
                 case constants.TREATMENTS:
                  this.setState({treatments: newData});
+                 break;
                 case constants.VISITS:
                  this.setState({visits: newData});
+                 break;
                 case constants.VISITORS:
                  this.setState({visitors: newData});
+                 break;
                 default:
                   break;
               }
@@ -106,7 +137,7 @@ class App extends Component {
     }
     putHandler(table, data){
         let id;
-        if(table == constants.DOCTORS){
+        if(table == constants.DOCTORS || table == constants.PATEINTS || table == constants.VISITORS){
           id = data.pesel;
         }else{
           id = data.id;
@@ -139,9 +170,89 @@ class App extends Component {
     changePanel(panel){
       this.setState({panel: panel})
     }
-
+ 
     panelSwitch(){
       switch (this.state.panel){
+          case constants.EDIT_VISITOR:
+            return <EditVisitor
+              changePanel={this.changePanel}
+              data={this.state.edit}
+              putHandler={this.putHandler}
+            />;
+          case constants.NEW_VISITOR:
+            return <NewVisitor
+              changePanel={this.changePanel}
+              postHandler={this.postHandler}
+            />;
+          case constants.VISITORS:
+            return <Visitors
+              visitors={this.state.visitors}
+              changePanel={this.changePanel}
+              getHandler={this.getHandler}
+              deleteHandler={this.deleteHandler}
+              editItemHandler={this.editItemHandler}
+              changePanel={this.changePanel}
+            />;
+          case constants.EDIT_VISIT:
+            return <EditVisit
+              changePanel={this.changePanel}
+              data={this.state.edit}
+              putHandler={this.putHandler}
+            />;
+          case constants.NEW_VISIT:
+            return <NewVisit
+              changePanel={this.changePanel}
+              postHandler={this.postHandler}
+            />;
+          case constants.VISITS:
+            return <Visits
+              visits={this.state.visits}
+              changePanel={this.changePanel}
+              getHandler={this.getHandler}
+              deleteHandler={this.deleteHandler}
+              editItemHandler={this.editItemHandler}
+              changePanel={this.changePanel}
+            />;
+          case constants.EDIT_TREATMENT:
+            return <EditTreatment
+              changePanel={this.changePanel}
+              data={this.state.edit}
+              putHandler={this.putHandler}
+            />;
+          case constants.NEW_TREATMENT:
+            return <NewTreatment
+              changePanel={this.changePanel}
+              postHandler={this.postHandler}
+            />;
+          case constants.TREATMENTS:
+            return <Treatments
+              treatments={this.state.treatments}
+              changePanel={this.changePanel}
+              getHandler={this.getHandler}
+              deleteHandler={this.deleteHandler}
+              editItemHandler={this.editItemHandler}
+              changePanel={this.changePanel}
+            />;
+          case constants.EDIT_PATIENT:
+            return <EditPatient
+              changePanel={this.changePanel}
+              data={this.state.edit}
+              putHandler={this.putHandler}
+            />;
+          case constants.NEW_PATIENT:
+            return <NewPatient
+              changePanel={this.changePanel}
+              postHandler={this.postHandler}
+            />;
+          case constants.PATEINTS:
+            return <Patients
+              patients={this.state.patients}
+              changePanel={this.changePanel}
+              getHandler={this.getHandler}
+              deleteHandler={this.deleteHandler}
+              editItemHandler={this.editItemHandler}
+              changePanel={this.changePanel}
+            />;
           case constants.EDIT_MEDICAL_PROCEDURE:
             return <EditMedicalProcedure
               changePanel={this.changePanel}
@@ -212,6 +323,7 @@ class App extends Component {
             return <NewLocalization
               changePanel={this.changePanel}
               postHandler={this.postHandler}
+              clinics={this.state.clinics}
             />;
           case constants.LOCALIZATIONS:
             return <Localizations
@@ -252,6 +364,7 @@ class App extends Component {
             return <NewClinic 
               changePanel={this.changePanel}
               postHandler={this.postHandler}
+              localizations={this.state.localizations}
             />;
           case constants.CLINICS:
             return <Clinics 
